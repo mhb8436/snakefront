@@ -1,6 +1,5 @@
 # Snakefront
-
-Snakefront is a web-based interface for managing snakemake workflows and projects, built on top of Django. It provides functionality for creating, editing, and managing workflows and projects, as well as integrating with S3 storage and Git repositories.
+Snakefront is a web-based interface for managing [Snakemake](https://github.com/snakemake/snakemake) workflows and projects, built on top of Django. It provides functionality for creating, editing, and managing workflows and projects, as well as integrating with S3 storage and Git repositories.
 
 ## Features
 

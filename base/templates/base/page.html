@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block container %}
+    <div class="wrapper">
+        <div class="main-panel">
+            {% include "base/navigation.html" %}
+            {% include "messages/message.html" %}
+            <div class="content">
+                <div class="container-fluid">
+                   {% block content %}{% endblock %}
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav>
+                       <ul>
+                           <li style="float:right;"><a target="_blank" href="{{ GITHUB_DOCUMENTATION }}"><i class="icon ti ti-book"></i></a></li>
+                           <li style="float:right;"><a target="_blank" href="{{ GITHUB_REPOSITORY }}"><i class="icon ti ti-github"></i></a></li>
+                           {% if TWITTER_USERNAME %}<li style="float:right;"><a target="_blank" href="https://twitter.com/{{ TWITTER_USERNAME }}"><i class="icon ti ti-twitter-alt"></i></a></li>{% endif %}
+                       </ul>
+                       <p class="copyright text-center">
+                            ©
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>
+                            <a href="https://github.com/mhb8436">Pizzastudio</a>
+                        </p>
+                    </nav>
+                </div>
+            </footer>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends "base/page.html" %}
+{% load my_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block css %}
+<style>
+.sticky-top + .content {
+  padding-top: 250px;
+}
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    padding: 10px 50px;
+}
+.sticky-bottom {
+    flex-direction: row;
+    padding: 5px;
+    padding-top:10px;
+    margin: -28px;
+    position: fixed;
+    bottom: 0px;
+    background-color: white;
+    height: 150px;
+    width: 50%;
+    right: 0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="{% if workflow_id %}{% url 'main:edit_workflow' workflow_id %}{% else %}{% url 'main:new_project_workflow1' selected_project.uuid %}{% endif %}">
+{% csrf_token %}
+
+<div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">Main</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Name</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                </div>                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Project</label>
+                            <select name="project" id="project" class="form-control">
+                                <option {% if not selected_project %}selected{% endif %}>Select Project</option>
+                                {% for project in projects %}<option value="{{project.uuid}}" {% if selected_project and selected_project.uuid == project.uuid %}selected{% endif %}>{{project.name}}</option>{% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="workflow_type">Workflow Type</label>                            
+                            <select name="workflow_type" id="workflow_type" class="form-control">
+                                <option {% if not selected_workflow_type %}selected{% endif %}>Select Workflow Type</option>
+                                {% for wtype in wtypes %}<option value="{{wtype.value}}" {% if selected_workflow_type and selected_workflow_type.value == wtype.value %}selected{% endif %}>{{wtype.name}}</option>{% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">Get Source From Git</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Git Address</label>
+                            <input type="text" class="form-control" id="git_address" name="git_address" value="https://github.com/mhb8436/test4.git" placeholder="https://github.com/mhb8436/test4.git">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Git Branch</label>
+                            <input type="text" class="form-control" id="git_branch" name="git_branch" value="main" placeholder="main">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Git Tag</label>
+                            <input type="text" class="form-control" id="git_tag" name="git_tag" value="" placeholder="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">S3</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Unique S3 Prefix in Snakefile</label>
+                            <input type="text" class="form-control" id="s3_prefix" name="s3_prefix" value="" placeholder="S3 Prefix in Snakefile">
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div> -->
+<button type="submit" class="btn btn-primary float-right">Next</button>
+
+</form>
+
+{% endblock%}

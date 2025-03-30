@@ -1,0 +1,88 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block page_title %}Workflows{% endblock %}
+{% block css %}
+<style>
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    max-width: 1400px;
+    padding: 10px;
+}
+</style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header ">
+                    <p class="card-category">Recent Projects</p>
+                </div>
+                <div class="card-body">
+                    {% if projects %}                    
+                    <table id="taskTable1" class="table table-striped table-bordered"  width="100%">
+                    <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                    </thead>
+                    <tbody>{% for project in projects %}
+                        <tr>
+                            <td>{{ project.uuid }}</td>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.created_at }}</td>
+                            <td><button class="btn btn-primary"><a href="{% url 'main:project_workflows' project.uuid %}">View</a></button></td>
+                        </tr>
+                    {% endfor %}</tbody>
+                    </table>
+                    <p class="alert alert-secondary text-right"><a href="{% url 'project:project_list' %}">View</a> all project List </p>
+                    {% endif %}
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header ">
+                    <p class="card-category">Recent Workflows</p>
+                </div>
+                <div class="card-body">
+                    {% if workflows %}                      
+                      <table id="taskTable2" class="table table-striped table-bordered"  width="100%">
+                      <thead>
+                           <th>Id</th>
+                           <th>Name</th>
+                           <th>Status</th>
+                           <th>Snakefile</th>
+                           <th>Command</th>
+                           <th>Actions</th>
+                      </thead>
+                      <tbody>{% for workflow in workflows %}
+                          <tr>
+                            <td>{{ workflow.id }}</td>
+                            <td>{{ workflow.name }}</td>
+                            <td>{% include "fields/status.html" with status=workflow.retval %}</td>
+                            <td>{{ workflow.snakefile }}</td>
+                            <td><code>{{ workflow.command }}</code></td>
+                            <td><button class="btn btn-primary"><a href="{% url 'main:view_workflow' workflow.id %}">View</a></button></td>
+                          </tr>
+                      {% endfor %}</tbody>
+                    </table>                    
+                    {% endif %}
+               </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function(){
+    {% if projects %}$("#taskTable1").DataTable();{% endif %}
+    {% if workflows %}$("#taskTable2").DataTable();{% endif %}
+});
+</script>
+{% endblock %}

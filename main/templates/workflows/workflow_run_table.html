@@ -1,0 +1,33 @@
+{% load my_filters %}
+<div class="row">
+    <div class="col">
+        <div class="card">
+           <div class="card-body">
+             {% with fields=workflow.message_fields %}
+             <table id="taskTable" class="display" width="100%">
+               <thead>
+                    <tr>
+                       <th width="5%"></th>
+                       <th width="5%">Order</th>
+                       <th>Level</th>
+                       <th>Job</th>
+                       <th>Message</th>
+                   </tr>
+               </thead>
+              </table>
+              {% endwith %}
+              <div class="card-footer">
+                  <!--<div class="legend">
+                     <i class="fa fa-circle text-success"></i> Completed
+                     <i class="fa fa-circle text-info"></i> Running
+                     <i class="fa fa-circle text-danger"></i> Error
+                     <i class="fa fa-circle text-warning"></i> Warning
+                  </div>-->
+                  <hr>
+                  <div class="stats">
+                  {% if workflow.workflowstatus_set.count > 0 %}<i class="fa fa-history"></i>Last updated {{ workflow.workflowstatus_set.all.last.modify_date|timesince }} ago.{% endif %}
+                 </div>
+           </div>
+        </div>
+    </div>
+</div>

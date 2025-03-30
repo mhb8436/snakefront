@@ -1,0 +1,93 @@
+{% extends "base/page.html" %}
+{% load static %}
+{% block page_title %}Project List{% endblock %}
+{% block css %}
+<style>
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    max-width: 1400px;
+    padding: 10px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header ">
+                <p class="card-category">Task Infomation</p>
+            </div>
+            <div class="card-body">
+                <table class="tablesorter table table-striped" width="100%">
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{task.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td>{{task.description}}</td>
+                        </tr>
+                        <tr>
+                            <td>Workflow</td>
+                            <td>{% if workflow %}<a href="{% url 'main:view_workflow' workflow.id %}">{{workflow.name}}</a> &nbsp; &nbsp; [{{workflow.project.name}}] {% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>Folder</td>
+                            <td>{{folder}}</td>
+                        </tr>
+                        <tr>
+                            <td>Schedule</td>
+                            <td>{{schedule.minute}} {{schedule.hour}} {{schedule.day_of_week}} {{schedule.day_of_month}} {{schedule.month_of_year}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header ">
+                <p class="card-category">Scheduled Run Workflow List</p>
+            </div>
+            <div class="card-body">
+                {% if runworkflows %}                      
+                    <table id="taskTable" class="table table-striped table-bordered"  width="100%">
+                    <thead>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Done</th>
+                        <th>Total</th>
+                        <th>Started At</th>
+                        <th>Completed At</th>
+                    </thead>
+                    <tbody>{% for runworkflow in runworkflows %}
+                        <tr>
+                            <td>{{ runworkflow.name }}</td>
+                            <td>{{ runworkflow.status }}</td>
+                            <td>{{ runworkflow.done }}</td>
+                            <td>{{ runworkflow.total }}</td>
+                            <td>{{ runworkflow.started_at }}</td>
+                            <td>{{ runworkflow.completed_at }}</td>
+                            <td><a class="btn btn-primary btn-sm" href="{% url 'main:runworkflow_jobs' runworkflow.id %}">View</a></td>
+                        </tr>
+                    {% endfor %}</tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function(){
+    {%if runworkflows %}$("#taskTable").DataTable({
+        order: [[5, 'asc']]
+    });{% endif %}
+});
+</script>
+{% endblock %}

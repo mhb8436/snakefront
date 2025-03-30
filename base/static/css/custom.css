@@ -1,0 +1,46 @@
+.card {
+  padding:20px;
+}
+
+btn {
+  cursor: pointer !important;
+}
+
+.btn-info {
+   cursor: pointer !important;
+   border-color: #17a2b8 !important;   
+}
+
+.alert-secondary, .alert-info {
+  color: #464a4e !important;
+}
+
+.btn-warning {
+   cursor: pointer !important;
+}
+
+
+#square_logo {
+  width:50px;
+  float: right;
+  padding-bottom: 20px;
+}
+
+.alert button.close {
+    top: 36% !important;
+    right: 25px !important;
+}
+
+/* Data tables */
+
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: 1px solid #CCC !important;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    width: 55px !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #CCC !important;
+}

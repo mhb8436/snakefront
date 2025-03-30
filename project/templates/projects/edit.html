@@ -1,0 +1,48 @@
+{% extends "base/page.html" %}
+{% load my_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block css %}
+<style>
+.sticky-top + .content {
+  padding-top: 250px;
+}
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    padding: 10px 50px;
+}
+.sticky-bottom {
+    flex-direction: row;
+    padding: 5px;
+    padding-top:10px;
+    margin: -28px;
+    position: fixed;
+    bottom: 0px;
+    background-color: white;
+    height: 150px;
+    width: 50%;
+    right: 0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="{% url 'project:edit_project' project.uuid  %}">
+{% csrf_token %}
+
+{%for field in form%}
+<div class="form-group">
+    <label for="{{field.id_for_label}}">{{field.label}}</label>
+    <input type="{{field.field.widget.input_type}}"
+           class="form-control"
+           id="{{field.id_for_label}}"
+           placeholder="{{field.label}}"
+           value="{{field.value}}"
+           name="{{field.name}}"
+    />
+</div>
+{%endfor%}
+<button type="submit" value="Submit" class="btn btn-sm btn-primary">Save</button>
+</form>
+
+{% endblock %}

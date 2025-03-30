@@ -1,0 +1,135 @@
+{% extends "base/page.html" %}
+{% load my_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block css %}
+<style>
+.sticky-top + .content {
+  padding-top: 250px;
+}
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    padding: 10px 50px;
+}
+.sticky-bottom {
+    flex-direction: row;
+    padding: 5px;
+    padding-top:10px;
+    margin: -28px;
+    position: fixed;
+    bottom: 0px;
+    background-color: white;
+    height: 150px;
+    width: 50%;
+    right: 0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="{% url 'scheduler:new_scheduler' %}">
+{% csrf_token %}
+
+<div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">Main</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Name</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Description</label>
+                            <input type="text" class="form-control" id="description" name="description">
+                        </div>
+                    </div>
+                </div>                  
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="workflow">Workflow</label>                            
+                            <select name="workflow" id="workflow" class="form-control">
+                                <option {% if not selected_workflow %}selected{% endif %}>Select Workflow</option>
+                                {% for workflow in workflows %}<option value="{{workflow.id}}" {% if selected_workflow and selected_workflow.id == workflow.id %}selected{% endif %}>{{workflow.id}} / {{workflow.name}}[{{workflow.project.name}}]</option>{% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Schedule</label>
+                            <input type="text" class="form-control" id="schedule" name="schedule" placeholder="*/5 * * * *">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">Parameters</h4>
+            </div>
+            <div class="card-body">                
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="folder_type">Folder Type </label>                            
+                            <select name="folder_type" id="folder_type" class="form-control">
+                                <option {% if not selected_folder_type %}selected{% endif %}>Select Folder Type</option>
+                                {% for folder_type in folder_types %}<option value="{{folder_type.id}}" {% if selected_folder_type and selected_folder_type.id == folder_type.id %}selected{% endif %}>{{folder_type.name}}</option>{% endfor %}
+                            </select>
+                            <span class="help-block">dynamic: s3 watching folder, fixed: outputs_dir in Snakefile config</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Folder</label>
+                            <input type="text" class="form-control" id="folder" name="folder" placeholder="S3 Folder" value="{{selected_folder}}">
+                            <span class="help-block">S3 Watching Folder: sample/input_folders/{project_name}/{workflow_name}/{folder}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Operation Date Type</label>
+                            <select name="odate_type" id="odate_type" class="form-control">
+                                <option {% if not selected_odate_type %}selected{% endif %}>Select Operations Date Type</option>
+                                {% for odate_type in odate_types %}<option value="{{odate_type.id}}" {% if selected_odate_type and selected_odate_type.id == odate_type.id %}selected{% endif %}>{{odate_type.name}}</option>{% endfor %}
+                            </select>
+                            <span class="help-block">if set Oeration Date Type to current, then will be set --config odate={CURRENT DATE YYYYMMDD FORMAT} when snakemake execute</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="submit" class="btn btn-primary float-right">Save</button>
+
+</form>
+
+{% endblock%}

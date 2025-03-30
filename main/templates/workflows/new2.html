@@ -1,0 +1,167 @@
+{% extends "base/page.html" %}
+{% load my_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block css %}
+<style>
+.sticky-top + .content {
+  padding-top: 250px;
+}
+code {
+    color: rgb(0, 123, 255);
+    display: inline-block;
+    padding: 10px 50px;
+}
+.sticky-bottom {
+    flex-direction: row;
+    padding: 5px;
+    padding-top:10px;
+    margin: -28px;
+    position: fixed;
+    bottom: 0px;
+    background-color: white;
+    height: 150px;
+    width: 50%;
+    right: 0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<form method="POST" action="{% url 'main:new_or_edit_project_workflow2' project.uuid workflow.id %}">
+{% csrf_token %}
+<div class="sticky-top" style="flex-direction:row; padding:0px; margin:0px" id="buttons"><a class="btn btn-sm btn-primary" href="#div_main" role="button" style="opacity:100%;margin-right:5px;margin-bottom:0px;">MAIN</a>{% for name, group in groups.items %}<a class="btn btn-sm btn-primary" href="#div{{ name | slugify }}" role="button" style="opacity:100%;margin-right:5px;margin-bottom:0px;{% if name == "ENVIRONMENT MODULES" %}min-width:200px{% endif %}">{{ name }}</a>{% endfor %}  <input class="btn btn-sm btn-info" role="button" type="submit" value="Save Workflow" style="width:200px;opacity:100%;float:right"/>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<div class="row" class="content">
+    <div class="col" id="div_main">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">Main</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{workflow.name}}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="project">Project</label>
+                            <input type="text" class="form-control" id="project" name="project" value="{{project.name}}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="workflow_type">Workflow Type</label>                            
+                            <input type="text" class="form-control" id="workflow_type" name="workflow_type" value="{{workflow.workflow_type}}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="snakefile_content">Snakefile</label>                            
+                            <textarea class="form-control h-25" id="snakefile_content" name="snakefile_content" rows="10">{{snakefile_content}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% for name, group in groups.items %}<div class="row" class="content">
+    <div class="col" id="div{{ name | slugify }}">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" style="margin-left:15px;">{{ name }}</h4>
+            </div>
+            <div class="card-body">{% for action_name, action in group.items %}
+                  <div class="row">
+                     <div class="col-md-12">
+                     {{ action.field | safe }}
+                     <hr>
+                     </div>
+                  </div>{% endfor %}
+            </div>
+        </div>
+    </div>
+</div>{% endfor %}
+
+</form>
+
+<div class="sticky-bottom">
+    <code id="command">
+    </code>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+$(document).ready(function(){
+     $("input[type=checkbox]").bootstrapSwitch();
+});
+
+var buttons = document.getElementById("buttons");
+var sticky = buttons.offsetTop;
+
+// Helper to serliaze form into object
+function serializeForm(formArray) {
+    var returnArray = {};
+    for (var i = 0; i < formArray.length; i++){
+        returnArray[formArray[i]['name']] = formArray[i]['value'];
+    }
+    return returnArray;
+}
+
+function update_command() {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const data = $("form").serialize();
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'main:workflow_command' %}",
+        data: data,
+        dataType: "json",
+        headers: {'X-CSRFToken': csrftoken},
+        success: function(data) {
+           $("#command").html(data['command'])
+        },
+        error: function() {
+            alert('error handling here');
+        }
+    });
+}
+
+// Ensure that we update the command preview when the form changes
+$("input").change(function(){
+     update_command();
+})
+
+$('input').on('switchChange.bootstrapSwitch', function (event, state) {
+     update_command();
+}); 
+
+function stickyTop() {
+  if (window.pageYOffset > sticky) {
+    buttons.classList.add("sticky");
+  } else {
+    buttons.classList.remove("sticky");
+  }
+}
+window.onscroll = function() {stickyTop()};
+update_command()
+</script>
+{% endblock %}
+

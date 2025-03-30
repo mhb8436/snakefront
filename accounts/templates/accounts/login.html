@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container" style="padding-top:100px">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body card-header">
+                   <img src="{% static 'img/logo_square.png' %}" id="square_logo">
+                   <form action="{% url 'accounts:login' %}" method="POST">
+                       {% csrf_token %}
+                       <!-- {{ form.as_p }} -->
+                       {%for field in form%}
+                        <div class="form-group">
+                            <label for="{{field.id_for_label}}">{{field.label}}</label>
+                            <input type="{{field.field.widget.input_type}}"
+                                   class="form-control"
+                                   id="{{field.id_for_label}}"
+                                   placeholder="{{field.label}}"
+                                   name="{{field.name}}"
+                            />
+                        </div>
+                       {%endfor%}
+                       <button type="submit" value="Submit" class="btn btn-sm btn-primary">Login</button>
+                   </form>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

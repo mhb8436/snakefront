@@ -1,0 +1,73 @@
+# The snakeface settings.yml file is kept alongside the install location,
+# meaning that it should only be editable by an owner or system administrator
+
+# How to fill in fields? -------------------------------------------------------
+# For fields that you want to leave undefined, leave them as null
+# All fields get read in to a global settings.cfg.SETTING_NAME object.
+
+# How to set secrets? ----------------------------------------------------------
+# For each setting below, a value found in the environment prefixed with
+# SNAKEFRONT_ will override it. This means that you should generally leave 
+# secrets unset (e.g., SENDGRID keys). and insteaed explort them in the 
+# environment (e.g., SNAKEFACE_SENDGRID_API_KEY).
+
+# Social Networks
+GOOGLE_ANALYTICS_SITE: null
+GOOGLE_ANALYTICS_ID: null
+TWITTER_USERNAME: johanneskoester
+
+# Repository and Documentation
+GITHUB_REPOSITORY: https://github.com/mhb8436/snakefront
+GITHUB_DOCUMENTATION: https://github.com/mhb8436/snakefront
+
+# Workflow running limits
+USER_WORKFLOW_LIMIT: 50 
+USER_WORKFLOW_RUNS_LIMIT: 50
+USER_WORKFLOW_GLOBAL_RUNS_LIMIT: 1000
+
+# Only allow notebooks, set to non null (disables all other auth)
+NOTEBOOK_ONLY: null
+
+# Maximum number of jobs to allow running at once
+MAXIMUM_NOTEBOOK_JOBS: 2
+
+# How often to refresh statuses on a workflow details page
+WORKFLOW_UPDATE_SECONDS: 10
+
+# Executors (set to non null to enable, use profile if needed), local set by default
+EXECUTOR_CLUSTER: null
+EXECUTOR_GOOGLE_LIFE_SCIENCES: null
+EXECUTOR_KUBERNETES: null
+EXECUTOR_TIBANNA: null
+EXECUTOR_GA4GH_TES: null
+
+# Disable other argument groups by setting these to non null
+DISABLE_SINGULARITY: null
+DISABLE_CONDA: null
+DISABLE_NOTEBOOKS: true
+
+# Global server settings
+ENVIRONMENT: test
+HELP_CONTACT_URL: https://github.com/mhb8436/snakefront/issues
+SENDGRID_API_KEY: null
+SENDGRID_SENDER_EMAIL: null
+DOMAIN_NAME: http://127.0.0.1
+DOMAIN_PORT: 8000
+REQUIRE_AUTH: true
+
+# Set a default profile (see https://github.com/snakemake-profiles)
+PROFILE: null
+
+# Workflow collection settings
+PRIVATE_ONLY: null
+
+# Caching
+ENABLE_CACHE: false
+
+# Default working directory (overridden by client and environment)
+WORKDIR: /Users/mhb8436/Workspaces/snake/projects
+
+# Plugins (set to non null value to enable)
+PLUGIN_LDAP_AUTH_ENABLED: null
+PLUGIN_PAM_AUTH_ENABLED: null
+PLUGIN_SAML_AUTH_ENABLED: null
